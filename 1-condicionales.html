@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aprendiendo VueJS</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>Hola VueJS</h1>
+    <!-- <h2>{{ message }}</h2> -->
+    <!-- <h2 v-text=" 'Hola ' + message"></h2> -->
+    <h2 v-show="message">Hola <span v-text="message"></span></h2>
+    <h2 v-show="message.length > 2">Hola <span v-text="message"></span></h2>
+    <br>
+    <h2 v-if="message2.length > 2">Hola <span v-text="message2"></span></h2>
+    <h3 v-else>Escribe un mensaje</h3>
+
+    <label for=""> Message 1</label>
+    <input type="text" v-model="message">
+    <label for=""> Message 2</label>
+    <input type="text" v-model="message2">
+  </div>
+  <script>
+    new Vue({
+      el:'#app',
+      data: {
+        message: 'Hello',
+        message2: 'Welcome!'
+      }
+    })
+  </script>
+</body>
+</html>
