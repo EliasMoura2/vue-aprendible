@@ -1,0 +1,11 @@
+.fa-square .fa-check-square {
+  cursor: pointer;
+}
+
+body{
+  background-color: aliceblue;
+}
+
+li span{
+  background-color: #41B883;
+}
