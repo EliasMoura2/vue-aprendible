@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>Aprendiendo VueJS</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/0ebfa8f278.js" crossorigin="anonymous"></script>
+  <style>
+    .glyphicon-checked .glyphicon-unchecked {
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="app">
+      <h1>Todo list</h1>
+      <!-- Computed -->
+      <h4>Tareas completas : {{ completedTask }}</h4>
+      <h4>Tareas incompletas : {{ incompletedTask }}</h4>
+      <!--  
+          Con las propiedades computadas no se ejecutan los consoles por cada letra que 
+          ingresamos en el imput
+          Esto sucede porque las propiedades calculadas se guardan en cache y solo se
+          ejecuta si algunas de sus propiedades cambian.
+          En este caso dependen de las tareas(task), y no se vuelve a ejecutar a menos que
+          el array tasks cambie
+      -->
+      <ul>
+        <li v-for="task in tasks">
+          <span v-text="task.title"></span>
+          <!-- <span @click="task.completed = !task.completed" 
+                v-bind:class="{
+                  'far fa-square': true,
+                  'far fa-check-square': task.completed,
+                  'far fa-square': !task.completed
+                }"> -->
+            <!-- v-bind nos permite manipular con js el contenido   -->
+            <!-- agregamos un objeto donde el primer elemento es la clase y el valor es un boolean -->
+            <!-- La clase se aplica o no segun el valor -->
+          <!-- </span> -->
+
+          <!-- Otra forma de agregar clases es con un array -->
+          <!-- <span @click="task.completed = !task.completed" 
+                :class="['far', task.completed ? 'fa-check-square' : 'fa-square' ]"> -->
+                <!-- No es bueno tener logica en las plantillas como es un binding podemos
+                    llamar a metodos o propiedades calculadas pero como estamos en un for
+                    no podemos hacerlo asi que usamos una funcion
+                -->
+          <!-- </span> -->
+
+          <!-- Usando funciones dentro del v-for y span -->
+          <span @click="taskComplete(task)" :class="taskClasses(task)"></span> 
+            <!--  seria mejor usar computed properties para calcular que clases aplicar.
+                  Del modo que esta actualmente se ejecutara el metodo taskClasses
+                  por cada elemento del for y por cada vez que algo cambie en la instancia de vue 
+            -->
+          <!-- <span @click="task.completed = true" class="far fa-check-square">
+          </span> -->
+        </li>
+        <li class="form-inline">
+          <input v-on:keyup.enter="addTask" v-model="newTask" type="text" class="form-control">
+        </li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    new Vue({
+      el:'#app',
+      data: {
+        newTask: '',
+        tasks: [
+          { title: 'Learn HTML5', completed: true},
+          { title: 'Learn CSS3', completed: false},
+          { title: 'Learn JS', completed: true }
+        ]
+      },
+      methods: {
+        addTask: function(){
+          if(this.newTask.length <= 1 ) return alert('Ingrese una tarea');
+          this.tasks.push({
+            title: this.newTask,
+            completed: false
+          });
+          this.newTask = ""
+        },
+        taskComplete: function(task){
+          task.completed = ! task.completed
+        },
+        taskClasses: function (task){
+          return ['far', task.completed ? 'fa-check-square' : 'fa-square']
+        }
+      },
+      computed: {
+        reverseTask: function() {
+          return this.newTask.split('').reverse().join('')
+        },
+        completedTask: function(){
+          // con los console podemos ver que cada vez que ingresamos una letra para una nueva tarea 
+          //se vuelve a contar
+          console.log('trigger completedTask')
+          return this.tasks.filter(function(task){
+            return task.completed
+          }).length
+        },
+        incompletedTask: function(){
+          console.log('trigger incompletedTask')
+          return this.tasks.filter(function(task){
+            return !task.completed
+          }).length
+        }
+      }
+    })
+  </script>
+</body>
+</html>
